@@ -1,0 +1,148 @@
+﻿.block .content
+{
+    background-color: white;
+    padding: 0 20px 20px 20px;
+    margin: 20px 0;
+}
+
+.block .content .row
+{
+    margin: 20px 0 0 0;
+    display: flex;
+}
+
+.block .content .row .input#name
+{
+    margin: 0 20px 0 0;
+    flex-grow: 3;
+}
+
+.block .content .row .input#url
+{
+    width: 300px;
+}
+
+.block .content .row .input#overview
+{
+    flex-grow: 3;
+}
+
+.block .content .row .input#due-date
+{
+    margin: 0 20px;
+}
+
+.block .content .row .input#parent-project
+{
+    flex-grow: 3;
+}
+
+.block .content .row .input label
+{
+    display: block;
+    text-transform: uppercase;
+}
+
+.block .content .row .input input
+{
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    width: calc(100% - 20px);
+}
+
+.block .content .row .input input:focus
+{
+    outline: 0;
+}
+
+.block .content .row .input .error
+{
+    margin: 5px 0 0 0;
+    color: #B71C1C;
+}
+
+.block .content .row .input textarea
+{
+    min-height: 300px;
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    width: calc(100% - 20px);
+    resize: vertical;
+    font-family: Roboto Condensed;
+}
+
+.block .content .row .input textarea:focus
+{
+    outline: 0;
+}
+
+.block .content .row .input select
+{
+    width: 100%;
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    font-family: Roboto Condensed;
+}
+
+.block .content .row .input select:focus
+{
+    outline: 0;
+}
+
+.block .content .row#controls
+{
+    align-items: center;
+}
+
+.block .content .row#controls button
+{
+    margin: 0 20px 0 0 ;
+    padding: 10px;
+    background-color: #009688;
+    color: white;
+    text-align: center;
+    border: 0;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: 0;
+}
+
+.block .content .row#controls button:focus
+{
+    outline: 0;
+}
+
+.block .content .row#controls button:hover
+{
+    background-color: #004D40;
+}
+
+.block .content .row#controls a
+{
+    margin: 0 20px 0 0;
+    padding: 10px;
+    background-color: #F44336;
+    color: white;
+    text-align: center;
+    border: 0;
+    border-radius: 2px;
+    cursor: pointer;
+    outline: 0;
+}
+
+.block .content .row#controls a:hover
+{
+    background-color: #B71C1C;
+}

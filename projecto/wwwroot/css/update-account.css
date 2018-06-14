@@ -1,0 +1,97 @@
+﻿.block .content
+{
+    margin: 20px 0 0 0;
+    background-color: white;
+    padding: 0 20px 20px 20px;
+}
+
+.block .content .row
+{
+    margin: 20px 0 0 0;
+    display: flex;
+}
+
+.block .content .row .item
+{
+    width: calc(50% - 10px);
+}
+
+.block .content .row .item.left
+{
+    margin: 0 20px 0 0;
+}
+
+.block .content .row label
+{
+    text-transform: uppercase;
+    display: block;
+}
+
+.block .content .row input
+{
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    width: calc(100% - 20px);
+}
+
+.block .content .row input:focus
+{
+    outline: 0;
+}
+
+.block .content .row .item .error
+{
+    margin: 5px 0 0 0;
+    color: #B71C1C;
+}
+
+.block .content .controls
+{
+    display: flex;
+    margin: 20px 0 0 0;
+}
+
+.block .content .controls .button
+{
+    margin: 0 20px 0 0;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 2px;
+    border: 0;
+    background-color: #009688;
+    color: white;
+}
+
+.block .content .controls button.button:hover
+{
+    background-color: #004D40;
+}
+
+.block .content .controls a.button
+{
+    background-color: #F44336;
+}
+
+.block .content .controls a.button:hover
+{
+    background-color: #B71C1C;
+}
+
+.block .content .controls .spacer
+{
+    flex-grow: 3;
+}
+
+.block .content .controls .button .icon
+{
+    margin: 0 5px 0 0;
+}
+
+.block .content .controls .button:hover
+{
+    color: white;
+}

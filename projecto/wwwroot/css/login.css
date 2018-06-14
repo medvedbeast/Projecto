@@ -1,0 +1,154 @@
+﻿.page
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.page .container
+{
+    background-color: white;
+}
+
+.page .container form
+{
+    margin: 40px;
+}
+
+.page .container form .title
+{
+    font-size: 2.56em;
+    text-align: center;
+    color: #009688;
+    text-transform: uppercase;
+    line-height: 48px;
+}
+
+.page .container form .information
+{
+    margin: 20px 0 0 0;
+    color: #B5B5B5;
+    text-align: center;
+}
+
+.page .container form .information a
+{
+    color: #009688;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.page .container form .validation-summary-errors ul
+{
+    margin: 20px 0 0 0;
+    padding: 0;
+    color: #B71C1C;
+    list-style: none;
+    text-align: center;
+}
+
+.page .container form .row
+{
+    margin: 20px 0 0 0;
+}
+
+.page .container form .row label
+{
+    display: block;
+    text-transform: uppercase;
+}
+
+.page .container form .row input
+{
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    width: calc(100% - 20px);
+}
+
+.page .container form .row input:focus
+{
+    outline: 0;
+}
+
+.page .container form .row .error
+{
+    margin: 5px 0 0 0;
+    color: #B71C1C;
+}
+
+.page .container form .submit
+{
+    display: flex;
+    justify-content: center;
+}
+
+.page .container form .submit button
+{
+    cursor: pointer;
+    margin: 20px 0 0 0;
+    background-color: #009688;
+    color: white;
+    border: 0;
+    border-radius: 2px;
+    width: 118px;
+    height: 43px;
+}
+
+.page .container form .submit button:hover
+{
+    background-color: #004D40;
+}
+
+.page .container .social
+{
+    margin: 0 20px 40px 40px;
+}
+
+.page .container .social a,
+.page .container .social a:visited
+{
+    text-decoration: none;
+    color: inherit;
+}
+
+.page .container .social .title
+{
+    margin: 0 20px 0 0;
+    color: #B5B5B5;
+    text-align: center;
+}
+
+.page .container .social .buttons
+{
+    display: flex;
+}
+
+.page .container .social .buttons .item
+{
+    display: flex;
+    align-items: center;
+    border: 1px solid #004D40;
+    border-radius: 2px;
+    margin: 10px 20px 0 0;
+    cursor: pointer;
+    width: 118px;
+    height: 43px;
+    justify-content: center;
+    align-items: center;
+}
+
+.page .container .social .buttons .item .icon
+{
+    margin: 0 5px 0 0;
+}
+
+.page .container .social .buttons .item:hover
+{
+    background-color: #009688;
+    color: white;
+}

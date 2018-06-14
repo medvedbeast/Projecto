@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="utf-8" lang="en-us" />
+    <title>@ViewBag.Title</title>
+    <!-- styles -->
+    <link href="~/css/common.css" rel="stylesheet" type="text/css" />
+    <link href="~/css/default.css" rel="stylesheet" type="text/css" />
+    @if (ViewBag.Stylesheet != null)
+    {
+        <link href="~/css/@ViewBag.Stylesheet" rel="stylesheet" type="text/css" />
+    }
+    <!-- fonts + icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
+    <!-- libraries -->
+    <script src="~/lib/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js" type="text/javascript"></script>
+    <script src="~/lib/jquery-ajax-unobtrusive/jquery.unobtrusive-ajax.min.js" type="text/javascript"></script>
+    @if (ViewBag.Vue != null)
+    {
+        <script src="https://unpkg.com/vue" type="text/javascript"></script>
+    }
+    <!-- scripts -->
+    @RenderSection("scripts", false)
+    <script src="~/js/common.js" type="text/javascript"></script>
+    @if (ViewBag.Script != null)
+    {
+        <script src="~/js/@ViewBag.Script" type="text/javascript"></script>
+    }
+</head>
+<body onload="OnBodyLoaded()">
+    <div class="header">
+        <div class="content">
+            <a asp-action="Index" asp-controller="Home">
+                <div class="logo">
+                    projecto
+                </div>
+            </a>
+            <div class="spacer"></div>
+            <a asp-action="Index" asp-controller="Account" asp-route-id="">
+                <div class="link">
+                    <div class="icon">person</div>
+                    <div class="label">@User.Identity.Name</div>
+                </div>
+            </a>
+            <a asp-action="Logout" asp-controller="Account">
+                <div class="link">
+                    <div class="icon">exit_to_app</div>
+                    <div class="label">logout</div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="page">
+        @RenderBody()
+    </div>
+    <div class="footer">
+
+    </div>
+    @RenderSection("vue", false)
+</body>
+</html>

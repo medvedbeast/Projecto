@@ -1,0 +1,95 @@
+﻿@model CreateIssueViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.VersionName} // Create issue";
+    ViewBag.Stylesheet = "create-issue.css";
+}
+
+<div class="block">
+    <div class="title">
+        Create new issue:
+    </div>
+    <form class="content border shadow" asp-action="Create" method="post">
+        <input type="hidden" asp-for="VersionName"/>
+        <input type="hidden" asp-for="VersionId"/>
+        <div class="row">
+            <div id="subject" class="input">
+                <label asp-for="Subject">Issue subject</label>
+                <input asp-for="Subject" />
+                <div class="error">
+                    <span asp-validation-for="Subject"></span>
+                </div>
+            </div>
+            <div id="parent-issue" class="input">
+                <label asp-for="ParentIssueId">Parent issue</label>
+                <select asp-for="ParentIssueId">
+                    <option value="0">no parent issue</option>
+                    @await Component.InvokeAsync(nameof(VersionIssuesSelect), new { versionId = Model.VersionId, selectedId = Model.ParentIssueId ?? 0})
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div id="type-id" class="input">
+                <label asp-for="TypeId">Issue type</label>
+                <select asp-for="TypeId">
+                    @await Component.InvokeAsync(nameof(IssueTypeSelect), Model.TypeId)
+                </select>
+            </div>
+            <div id="status-id" class="input">
+                <label asp-for="StatusId">Issue status</label>
+                <select asp-for="StatusId">
+                    @await Component.InvokeAsync(nameof(IssueStatusSelect), Model.StatusId)
+                </select>
+            </div>
+            <div id="priority-id" class="input">
+                <label asp-for="PriorityId">Issue priority</label>
+                <select asp-for="PriorityId">
+                    @await Component.InvokeAsync(nameof(IssuePrioritySelect), Model.PriorityId)
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div id="description" class="input">
+                <label asp-for="Description">Issue description</label>
+                <textarea asp-for="Description"></textarea>
+                <div class="error">
+                    <span asp-validation-for="Description"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="start-date" class="input">
+                <label asp-for="StartDate">Start date</label>
+                <input asp-for="StartDate" />
+                <div class="error">
+                    <span asp-validation-for="StartDate"></span>
+                </div>
+            </div>
+            <div id="due-date" class="input">
+                <label asp-for="DueDate">Due date</label>
+                <input asp-for="DueDate" />
+                <div class="error">
+                    <span asp-validation-for="DueDate"></span>
+                </div>
+            </div>
+            <div id="estimated-time" class="input">
+                <label asp-for="EstimatedTime">Estimated time <i>(hours)</i></label>
+                <input asp-for="EstimatedTime" />
+                <div class="error">
+                    <span asp-validation-for="EstimatedTime"></span>
+                </div>
+            </div>
+            <div id="done" class="input">
+                <label asp-for="Done">Issue progress <i>(%)</i></label>
+                <input asp-for="Done" />
+                <div class="error">
+                    <span asp-validation-for="Done"></span>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="button" type="submit">CREATE ISSUE</button>
+            <a class="button" asp-action="Index" asp-controller="Version">CANCEL</a>
+        </div>
+    </form>
+</div>

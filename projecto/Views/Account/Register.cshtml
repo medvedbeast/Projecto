@@ -1,0 +1,71 @@
+﻿@model RegisterViewModel
+@{
+    Layout = "_Clear";
+    ViewBag.Title = "Projecto // Register";
+    ViewBag.Stylesheet = "register.css";
+}
+<div class="page">
+    <div class="container border shadow">
+        <form class="form" asp-action="Register" method="post">
+            <div class="title">Register</div>
+            <div class="information">
+                Already have an account? You can <a asp-action="Login">sing in here.</a>
+            </div>
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="row">
+                <label asp-for="FirstName">First name:</label>
+                <input asp-for="FirstName" />
+                <div class="error">
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <label asp-for="LastName">Last name :</label>
+                <input asp-for="LastName" />
+                <div class="error">
+                    <span asp-validation-for="LastName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <label asp-for="Email">Email:</label>
+                <input asp-for="Email" />
+                <div class="error">
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="row">
+                <label asp-for="Password">Password:</label>
+                <input asp-for="Password" />
+                <div class="error">
+                    <span asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <div class="submit">
+                <button type="submit">SIGN UP</button>
+            </div>
+        </form>
+        <div class="social">
+            <div class="title">Or sign up using:</div>
+            <div class="buttons">
+                <a asp-action="ExternalLogin" asp-route-provider="Google">
+                    <div class="item">
+                        <div class="icon">fingerprint</div>
+                        <div class="label">Google</div>
+                    </div>
+                </a>
+                <a asp-action="ExternalLogin" asp-route-provider="Facebook">
+                    <div class="item">
+                        <div class="icon">fingerprint</div>
+                        <div class="label">Facebook</div>
+                    </div>
+                </a>
+                <a asp-action="ExternalLogin" asp-route-provider="Microsoft">
+                    <div class="item">
+                        <div class="icon">fingerprint</div>
+                        <div class="label">Microsoft</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

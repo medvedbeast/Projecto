@@ -1,0 +1,155 @@
+﻿@model VersionViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.Name}";
+    ViewBag.Stylesheet = "version.css";
+    ViewBag.Script = "version.js";
+}
+<div id="details" class="block">
+    <div class="title">
+        Project version details:
+    </div>
+    <div class="content shadow border">
+        <div class="controls">
+            @if (Model.UserRole != null && Model.UserRole != "Watcher")
+            {
+                <a asp-action="Create" asp-controller="Issue" asp-route-projectUrl="@Model.ProjectUrl" asp-route-versionUrl="@Model.Url">
+                    <div class="button" color="teal">
+                        <div class="icon">add</div>
+                        <div class="label">CREATE ISSUE</div>
+                    </div>
+                </a>
+            }
+            @if (Model.UserRole == "Creator" || Model.UserRole == "Manager")
+            {
+                <a asp-action="Update">
+                    <div class="button" color="green">
+                        <div class="icon">mode_edit</div>
+                        <div class="label">EDIT VERSION</div>
+                    </div>
+                </a>
+            }
+            @if (Model.Issues.Count() > 0)
+            {
+                <a asp-action="Board">
+                    <div class="button" color="green">
+                        <div class="icon">dashboard</div>
+                        <div class="label">AGILE BOARD</div>
+                    </div>
+                </a>
+            }
+            <div class="spacer"></div>
+            @if (Model.UserRole == "Creator" || Model.UserRole == "Manager")
+            {
+                <div class="button last" color="red" onclick="ShowDialog('#delete-dialog')">
+                    <div class="icon">delete</div>
+                    <div class="label">DELETE VERSION</div>
+                </div>
+            }
+        </div>
+        <div id="project-name" class="row">
+            <div class="label">Project name</div>
+            <div class="value">
+                <a asp-action="Index" asp-controller="Project" asp-route-projectUrl="@Model.ProjectUrl">@Model.ProjectName</a>
+            </div>
+        </div>
+        <div id="version-name" class="row">
+            <div class="label">Version name</div>
+            <div class="value">@Model.Name</div>
+        </div>
+        <div class="row">
+            <div class="label">Version overview</div>
+            <div class="value">@Html.Raw(Model.Overview)</div>
+        </div>
+        <div class="information">
+            <div class="item">
+                <div class="label">Start date</div>
+                <div class="value">@Model.StartDate.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Due date</div>
+                <div class="value">@Model.DueDate.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Open Issues</div>
+                <div class="value">@Model.OpenIssues</div>
+            </div>
+            <div class="item">
+                <div class="label">Closed Issues</div>
+                <div class="value">@Model.ClosedIssues</div>
+            </div>
+            <div class="item">
+                <div class="label">Outdated Issues</div>
+                <div class="value">@Model.OutdatedIssues</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="issues" class="block">
+    <div class="title">
+        Version Issues:
+    </div>
+    <div class="content">
+        @if (Model.Issues.Count() > 0)
+        {
+            <table class="shadow border">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>SUBJECT</td>
+                        <td>TYPE</td>
+                        <td>STATUS</td>
+                        <td>PRIORITY</td>
+                        <td>DUE ON</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var issue in Model.Issues)
+                    {
+                        <tr class="@(issue.DueDate < DateTime.Today && (issue.Status == "New" || issue.Status == "In Progress" || issue.Status == "Feedback") ? "outdated" : "")"
+                            onclick="location = '@Url.Action("Index", "Issue", new { projectUrl = Model.ProjectUrl, versionUrl = Model.Url, issueId = issue.Id })'">
+                            <td class="id">@($"#{issue.Id}")</td>
+                            <td class="subject">@issue.Subject</td>
+                            <td class="type">@issue.Type</td>
+                            <td class="status">@issue.Status</td>
+                            <td class="priority">@issue.Priority</td>
+                            <td class="date">@issue.DueDate.ToString("dd.MM.yy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="placeholder">
+                <div class="icon">info_outline</div>
+                <div class="label">No issues found!</div>
+            </div>
+        }
+    </div>
+</div>
+<div id="delete-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="Delete" asp-controller="Version" asp-route-projectUrl="@Model.ProjectUrl" asp-route-versionUrl="@Model.Url">
+        <div class="title alert">You really want to delete this version?</div>
+        <div class="content">
+            If you delete a project version, all related issues will be deleted.<br />
+            Do you confirm your action?
+        </div>
+        <div class="controls">
+            <button type="button" class="margined alert" onclick="OnConfirmDeleteClicked('#delete-dialog')">DELETE</button>
+            <button type="button" onclick="HideDialog('#delete-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="answer-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title alert">Oh no... Rejecto!</div>
+        <div class="content">
+            You can't delete a project's version when it's the only one that exists.<br />
+            You may want to delete the project instead.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#answer-dialog')">OK</button>
+        </div>
+    </form>
+</div>

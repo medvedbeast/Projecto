@@ -1,0 +1,44 @@
+﻿@model ProjectActivitiesViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.ProjectName} // Activities";
+    ViewBag.Stylesheet = "project-activities.css";
+}
+<div id="activities" class="block">
+    <div class="title">
+        Recent Project Activities:
+    </div>
+    <div class="content">
+        @if (Model.Activities.Count() > 0)
+        {
+            <table class="shadow border">
+                <thead>
+                    <tr>
+                        <td>Time</td>
+                        <td>Author</td>
+                        <td>Content</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var activity in Model.Activities)
+                    {
+                        <tr>
+                            <td class="time">@activity.Time.ToString("dd.MM.yy HH:mm")</td>
+                            <td class="author"><a asp-action="Index" asp-controller="Account" asp-route-id="@activity.AuthorId">@activity.Author</a></td>
+                            <td class="content">
+                                @activity.Content
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="placeholder">
+                <div class="icon">info_outline</div>
+                <div class="label">No recent activities!</div>
+            </div>
+        }
+    </div>
+</div>

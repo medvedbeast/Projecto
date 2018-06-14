@@ -1,0 +1,60 @@
+﻿@model CreateVersionViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.ProjectName} // Create version";
+    ViewBag.Stylesheet = "create-version.css";
+}
+<div class="block">
+    <div class="title">
+        Create new project version:
+    </div>
+    <div class="content shadow border">
+        <form asp-action="Create" asp-controller="Version">
+            <div class="row">
+                <div id="name" class="item left">
+                    <label asp-for="Name">Version Name</label>
+                    <input asp-for="Name" />
+                    <div class="error">
+                        <span asp-validation-for="Name"></span>
+                    </div>
+                </div>
+                <div id="version" class="item">
+                    <label asp-for="Url">Version url</label>
+                    <input asp-for="Url" />
+                    <div class="error">
+                        <span asp-validation-for="Url"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div id="overview" class="item">
+                    <label asp-for="Overview">Version Overview</label>
+                    <textarea asp-for="Overview"></textarea>
+                    <div class="error">
+                        <span asp-validation-for="Overview"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="item left">
+                    <label asp-for="StartDate">Start Date</label>
+                    <input asp-for="StartDate" />
+                    <div class="error">
+                        <span asp-validation-for="StartDate"></span>
+                    </div>
+                </div>
+                <div class="item">
+                    <label asp-for="DueDate">Due Date</label>
+                    <input asp-for="DueDate" />
+                    <div class="error">
+                        <span asp-validation-for="DueDate"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="button" type="submit">CREATE VERSION</button>
+                <a class="button" asp-action="Index" asp-controller="Project">CANCEL</a>
+            </div>
+        </form>
+    </div>
+</div>

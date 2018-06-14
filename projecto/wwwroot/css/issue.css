@@ -1,0 +1,288 @@
+﻿.block
+{
+    margin: 0 0 40px 0;
+}
+
+.block#details .content
+{
+    margin: 20px 0 0 0;
+    background-color: white;
+    padding: 0 20px 20px 20px;
+}
+
+.block#details .content .row
+{
+    display: flex;
+    margin: 20px 0 0 0;
+}
+
+.block#details .content .row a, .block#details .content .row .item
+{
+    display: block;
+    width: 100%;
+}
+
+.block#details .content .row .label
+{
+    color: #B5B5B5;
+    text-transform: uppercase;
+}
+
+.block#details .content .row .value
+{
+    white-space: nowrap;
+    margin: 5px 0 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.block#details .content .row .value[multiline]
+{
+    white-space: normal;
+}
+
+.block#details .content .row #subject .value
+{
+    font-size: 1.6em;
+}
+
+.block#details .content .row #project-name
+{
+    margin: 0 20px 0 0;
+}
+
+.block#details .content .row #project-name .value, .block#details .content .row #version-name .value, .block#details .content .row #parent-issue .value
+{
+    color: #009688;
+}
+
+.block#details .content .information
+{
+    border: 1px dashed #B5B5B5;
+    border-radius: 2px;
+    margin: 20px 0 0 0;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.block#details .content .information .item
+{
+    display: flex;
+    align-items: center;
+}
+
+.block#details .content .information .item .label
+{
+    text-transform: uppercase;
+    color: #009688;
+    margin: 0 5px 0 0;
+}
+
+.block#details .content .information .item .value
+{
+    font-size: 1.6em;
+}
+
+.block#details .content .controls
+{
+    display: flex;
+    margin: 20px 0 0 0;
+    justify-content: space-between;
+    padding: 0 0 20px 0;
+    border-bottom: 1px dashed #B5B5B5;
+}
+
+.block#details .content .controls .button
+{
+    display: flex;
+    align-items: center;
+    padding: 10px 10px;
+    cursor: pointer;
+    border-radius: 2px;
+}
+
+.block#details .content .controls .button.last
+{
+    margin: 0;
+}
+
+.block#details .content .controls .spacer
+{
+    flex-grow: 3;
+}
+
+.block#details .content .controls .button .icon
+{
+    margin: 0 5px 0 0;
+}
+
+.block#details .content .controls .button:hover
+{
+    color: white;
+}
+
+.block#details .content .controls .button[color="teal"]:hover
+{
+    background-color: #004D40;
+}
+
+.block#details .content .controls .button[color="red"]:hover
+{
+    background-color: #B71C1C;
+}
+
+.block#details .content .controls .button[color="orange"]:hover
+{
+    background-color: #F57F17;
+}
+
+.block#details .content .controls .button[color="blue"]:hover
+{
+    background-color: #0D47A1;
+}
+
+.block#details .content .controls .button[color="purple"]:hover
+{
+    background-color: #311B92;
+}
+
+.block#details .content .controls .button[color="green"]:hover
+{
+    background-color: #33691E;
+}
+
+.block#details .content .assignments
+{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 10px 0 0 0;
+}
+
+.block#details .content .assignments .item
+{
+    display: flex;
+    padding: 10px;
+    background-color: #009688;
+    color: white;
+    margin: 10px 10px 0 0;
+    border-radius: 2px;
+}
+
+.block#details .content .assignments .item.implementer
+{
+    background-color: #311B92;
+}
+
+.block#details .content .assignments .item.watcher
+{
+    background-color: #F57F17;
+}
+
+.block#details .content .assignments .item .role
+{
+    margin: 0 10px 0 0;
+}
+
+.block#details .content .assignments .item .name
+{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.block#attachments .content
+{
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 0 0 -20px;
+}
+
+.block#attachments .content .item
+{
+    background-color: white;
+    width: 233px;
+    height: 233px;
+    margin: 20px 0 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+}
+
+.block#attachments .content .item.empty
+{
+    width: 231px;
+    height: 231px;
+    border: 2px dashed #CECECE;
+    background-color: transparent;
+    flex-direction: column;
+}
+
+.block#attachments .content .item.empty .icon
+{
+    font-size: 64px;
+    color: #009688;
+}
+
+#attachment-create-dialog .content, #attachment-view-dialog .content
+{
+    min-width: 800px;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#attachment-create-dialog img
+{
+    max-width: 918px;
+    max-height: 50vh;
+}
+
+#attachment-create-dialog .input label
+{
+    display: block;
+}
+
+#attachment-create-dialog .input textarea
+{
+    width: calc(100% - 20px);
+    height: 100px;
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    resize: none;
+    font-family: Roboto Condensed;
+}
+
+#attachment-view-dialog img
+{
+    max-width: 918px;
+    max-height: 50vh;
+}
+
+#attachment-view-dialog .input label
+{
+    display: block;
+    color: #B5B5B5;
+}
+
+#attachment-view-dialog .input textarea
+{
+    width: 100%;
+    height: 100px;
+    margin: 5px 0 0 0;
+    background-color: #f8f8f8;
+    border: 0;
+    border-bottom: 4px solid #004D40;
+    border-radius: 2px;
+    padding: 5px 10px;
+    resize: none;
+    font-family: Roboto Condensed;
+}

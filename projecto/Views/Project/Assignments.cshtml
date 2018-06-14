@@ -1,0 +1,122 @@
+﻿@model ProjectAssignmentsViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.ProjectName} // Assignments";
+    ViewBag.Stylesheet = "project-assignments.css";
+    ViewBag.Script = "project-assignments.js";
+}
+<div class="block">
+    <div class="title">
+        CURRENT PROJECT ASSIGNMENTS:
+    </div>
+    <div id="content" class="content">
+        <div class="item empty" onclick="ShowDialog('#create-dialog')">
+            <div class="link">
+                <div class="icon">add</div>
+                <div class="value">Add new assignment</div>
+            </div>
+        </div>
+        @foreach (var assignee in Model.Assignees)
+        {
+            <div id="@assignee.AssignmentId" class="item border shadow" >
+                <div class="data" style="display: none;" assignment-id="@assignee.AssignmentId" role-id="@assignee.RoleId" name="@assignee.Name"></div>
+                <div class="role @assignee.Role.ToLower()">@assignee.Role</div>
+                <div class="name">
+                    <a asp-action="Index" asp-controller="Account" asp-route-id="@assignee.Id" target="_blank">
+                        @assignee.Name
+                    </a>
+                </div>
+                <div class="email">@assignee.Email</div>
+                <div class="actions">
+                    @if (assignee.Role != "Creator")
+                    {
+                        <div class="link" onclick="OnUpdateAssignmentClicked(@assignee.AssignmentId)">edit</div>
+                        <div class="link" onclick="OnDeleteAssignmentClicked(@assignee.AssignmentId)">detele</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!------------------------------------------------------dialogs---------------------------------------------->
+<div id="create-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="CreateAssignments">
+        <div class="title">Create new assignment</div>
+        <div class="input">
+            <label for="Keywords">Search by</label>
+            <input name="Keywords" type="text" onkeyup="OnKeywordsChanged()" />
+        </div>
+        @if (Model.Users.Count() > 0)
+        {
+            int index = 1;
+            <div id="search-results">
+                <div class="container">
+                    @foreach (var user in Model.Users)
+                    {
+                        <div class="item">
+                            <input id="user-@index" name="user-@index" type="checkbox" value="@user.Id" />
+                            <label for="user-@index">@user.Name</label>
+                        </div>
+                        index++;
+                    }
+                </div>
+            </div>
+        }
+        <div id="search-results-placeholder" class="@(Model.Users.Count() > 0 ? "hidden" : "")">
+            <div class="link">
+                <div class="icon">info_outline</div>
+                <div class="value">No users found</div>
+            </div>
+        </div>
+        <div class="input">
+            <div class="label">ASSIGN WITH ROLE</div>
+            <select id="assignment-role">
+                @await Component.InvokeAsync(nameof(ProjectAssignmentRoleSelect), new { exclude = "Creator" })
+            </select>
+        </div>
+        <div class="controls">
+            <button type="button" class="margined" onclick="OnConfirmCreateClicked()">ASSIGN</button>
+            <button type="button" onclick="HideDialog('#create-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="delete-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="DeleteAssignment">
+        <div class="title alert">Do you really want to remove assignment?</div>
+        <div class="content">
+            If you delete user from this project, all issues created by him will be deleted as well.
+        </div>
+        <div class="controls">
+            <button type="button" class="margined alert" onclick="OnConfirmDeleteClicked()">DELETE</button>
+            <button type="button" onclick="HideDialog('#delete-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="update-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="UpdateAssignment">
+        <div class="title">Edit user role</div>
+        <div class="content">
+        </div>
+        <div class="input">
+            <div class="label">PROJECT ROLE</div>
+            <select>
+                @await Component.InvokeAsync(nameof(ProjectAssignmentRoleSelect), new { exclude = "Creator" })
+            </select>
+        </div>
+        <div class="controls">
+            <button type="button" class="margined" onclick="OnConfirmUpdateClicked()">UPDATE</button>
+            <button type="button" onclick="HideDialog('#update-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="error-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title alert">Error</div>
+        <div class="content">
+            An error occured while processing your request. Please, try again later.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#error-dialog')">OK</button>
+        </div>
+    </form>
+</div>

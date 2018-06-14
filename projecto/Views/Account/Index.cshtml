@@ -1,0 +1,167 @@
+﻿@model AccountViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.FirstName} {Model.LastName} // Account";
+    ViewBag.Stylesheet = "account.css";
+    ViewBag.Script = "account.js";
+}
+@if (!Model.IsPasswordSet)
+{
+    <div class="alert">
+        <div class="icon">error_outline</div>
+        <div class="value">
+            You have been authentificated with an external service.<br />
+            If you want to authentificate with <b>login and password</b>, you must <a asp-action="Update" asp-controller="Account">set your password here</a>.
+        </div>
+    </div>
+}
+<div id="details" class="block">
+    <div class="title">
+        User infromation:
+    </div>
+    <div class="content shadow border">
+        @if (Model.IsSelf)
+        {
+            <div class="controls">
+                <a asp-action="Update">
+                    <div class="button" color="teal">
+                        <div class="icon">mode_edit</div>
+                        <div class="label">EDIT ACCOUNT INFORMATION</div>
+                    </div>
+                </a>
+                <div class="button" color="orange" onclick="ShowDialog('#invite-dialog')">
+                    <div class="icon">email</div>
+                    <div class="label">INVITE FRIENDS</div>
+                </div>
+                <div class="spacer"></div>
+                <div class="button last" color="red" onclick="ShowDialog('#delete-dialog')">
+                    <div class="icon">delete</div>
+                    <div class="label">DELETE ACCOUNT</div>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div id="first-name" class="item">
+                <div class="label">Frist name</div>
+                <div class="value">@Model.FirstName</div>
+            </div>
+            <div id="last-name" class="item">
+                <div class="label">Last name</div>
+                <div class="value">@Model.LastName</div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="email" class="item">
+                <div class="label">Email address</div>
+                <div class="value">@Model.Email</div>
+            </div>
+            <div id="group" class="item">
+                <div class="label">User group:</div>
+                <div class="value">@Model.Group</div>
+            </div>
+        </div>
+        <div class="information">
+            <div class="item">
+                <div class="label">Registered</div>
+                <div class="value">@Model.RegisteredOn.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Last Seen</div>
+                <div class="value">@Model.LastSeenOn.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Open Projects</div>
+                <div class="value">@Model.OpenProjects</div>
+            </div>
+            <div class="item">
+                <div class="label">Open Issues</div>
+                <div class="value">@Model.OpenIssues</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="activities" class="block">
+    <div class="title">
+        Recent Activities:
+    </div>
+    <div class="content">
+        @if (Model.Activities.Count() > 0)
+        {
+            <table class="shadow border">
+                <thead>
+                    <tr>
+                        <td>Time</td>
+                        <td>Project</td>
+                        <td>Content</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var activity in Model.Activities)
+                    {
+                        <tr>
+                            <td class="time">@activity.Time.ToString("dd.MM.yy HH:mm")</td>
+                            <td class="name">
+                                <a asp-action="Index" asp-controller="Project" asp-route-projectUrl="@activity.ProjectUrl">@activity.ProjectName</a>
+                            </td>
+                            <td class="content">
+                                @activity.Content
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="placeholder">
+                <div class="icon">info_outline</div>
+                <div class="label">No recent activities!</div>
+            </div>
+        }
+    </div>
+</div>
+<div id="invite-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="Invite" asp-controller="Account">
+        <div class="title">Invite you friends or colleagues</div>
+        <div class="content">
+            You can invite your fellow friend/colleague/cat/etc.<br />
+            Just enter his email and press the button.<br />
+            He'll receive an email with further instructions on how to be closer to you.
+        </div>
+        <div class="input">
+            <label for="Email">Target Email</label>
+            <input type="email" data-val="true" data-val-email="Email has invalid format." data-val-required="You must enter email address." id="Email" name="Email" value="" aria-describedby="Email-error" class="valid" aria-invalid="false" />
+            <div class="error" data-valmsg-for="Email" data-valmsg-replace="true">
+                <span class="field-validation-error" id="Email-error"></span>
+            </div>
+        </div>
+        <div class="controls">
+            <button type="button" class="margined" onclick="OnInviteClicked('#invite-dialog')">INVITE</button>
+            <button type="button" onclick="HideDialog('#invite-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="delete-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="Delete" asp-controller="Account">
+        <div class="title alert">You really want to delete your account?</div>
+        <div class="content">
+            If you delete your account, all related projects and issues will be deleted.<br />
+            Do you confirm your action?
+        </div>
+        <div class="controls">
+            <button type="submit" class="margined alert" onclick="OnConfirmDeleteClicked('#delete-dialog')">DELETE</button>
+            <button type="button" onclick="HideDialog('#delete-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="answer-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title">Success</div>
+        <div class="content">
+            You invitation was successfully sent.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#answer-dialog')">OK</button>
+        </div>
+    </form>
+</div>

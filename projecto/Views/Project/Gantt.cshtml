@@ -1,0 +1,109 @@
+﻿@model ProjectDiagramViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.ProjectName} // Gantt diagram";
+    ViewBag.Stylesheet = "project-diagram.css";
+    ViewBag.Script = "project-diagram.js";
+}
+<div class="block">
+    <div class="title">
+        PROJECT'S GANTT DIAGRAM
+    </div>
+    <div class="content">
+        <div id="diagram">
+            <div id="labels">
+                @foreach (var version in Model.Versions)
+                {
+                    <div class="group">
+
+                        <div class="item label">
+                            <a asp-action="Index" asp-controller="Version" asp-route-versionUrl="@version.Url" target="_blank">@version.Name</a>
+                        </div>
+
+                        @if (version.Issues.Count() > 0)
+                        {
+                            foreach (var issue in version.Issues)
+                            {
+                                <div class="item" title="@issue.Subject">
+                                    <a asp-action="Index" asp-controller="Issue" asp-route-versionUrl="@version.Url" asp-route-issueId="@issue.Id" target="_blank">
+                                        @(Html.Raw($"#{issue.Id}: <b>{issue.Subject}</b>"))
+                                    </a>
+                                </div>
+                            }
+                        }
+                    </div>
+                }
+            </div>
+            <div id="data">
+                <table cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr id="months">
+                            @for (int i = 0; i < Model.MonthsCount; i++)
+                            {
+                                DateTime date = Model.StartDate.AddMonths(i);
+                                <td colspan="@DateTime.DaysInMonth(date.Year, date.Month)">
+                                    @date.ToString("MM yyyy")
+                                </td>
+                            }
+                        </tr>
+                        <tr id="days">
+                            @for (int i = 0; i < Model.MonthsCount; i++)
+                            {
+                                DateTime date = Model.StartDate.AddMonths(i);
+                                int days = DateTime.DaysInMonth(date.Year, date.Month);
+                                for (int j = 1; j <= days; j++)
+                                {
+                                    <td>@j</td>
+                                }
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var version in Model.Versions)
+                        {
+                            int offset = (version.StartDate - new DateTime(Model.StartDate.Year, Model.StartDate.Month, 1)).Days;
+                            int length = (version.DueDate - version.StartDate).Days + 1;
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                @if (offset > 0)
+                                {
+                                    <td colspan="@offset"></td>
+                                }
+                                <td colspan="@length" class="version"></td>
+                            </tr>
+                            @if (version.Issues.Count() > 0)
+                            {
+                                foreach (var issue in version.Issues)
+                                {
+                                    offset = (issue.StartDate - new DateTime(Model.StartDate.Year, Model.StartDate.Month, 1)).Days;
+                                    length = (issue.DueDate - issue.StartDate).Days + 1;
+                                    double done = (double)issue.Done / 100;
+                                    int filled = (int)Math.Round(done * length);
+                                    int blank = length - filled;
+                                    <tr>
+                                        @if (offset > 0)
+                                        {
+                                            <td colspan="@offset"></td>
+                                        }
+                                        @if (filled > 0)
+                                        {
+                                            <td colspan="@filled" class="filled @(issue.DueDate < DateTime.Today && (issue.Status == "New" || issue.Status == "In Progress" || issue.Status == "Feedback") ? "outdated" : "done")">
+                                                @($"{done * 100}%")
+                                            </td>
+                                        }
+                                        @if (blank > 0)
+                                        {
+                                            <td colspan="@blank" class="filled">@(filled == 0 ? "0%" : "")</td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

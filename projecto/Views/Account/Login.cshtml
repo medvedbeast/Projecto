@@ -1,0 +1,58 @@
+﻿@model LoginViewModel
+@{
+    Layout = "_Clear";
+    ViewBag.Title = "Projecto // Login";
+    ViewBag.Stylesheet = "login.css";
+}
+<div class="page">
+    <div class="container border shadow">
+        <form class="form" asp-action="Login" method="post">
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="title">Login</div>
+            <div class="information">
+                Don't have an account? You can <a asp-action="Register">register here.</a>
+            </div>
+            <div asp-validation-summary="ModelOnly"></div>
+            <div class="row">
+                <label asp-for="Email">Email:</label>
+                <input asp-for="Email" />
+                <div class="error">
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="row">
+                <label asp-for="Password">Password:</label>
+                <input asp-for="Password" />
+                <div class="error">
+                    <span asp-validation-for="Password"></span>
+                </div>
+            </div>
+            <div class="submit">
+                <button type="submit">SIGN IN</button>
+            </div>
+        </form>
+        <div class="social">
+            <div class="title">Or login using:</div>
+            <div class="buttons">
+                <a asp-action="ExternalLogin" asp-route-provider="Google">
+                    <div class="item">
+                        <div class="icon">fingerprint</div>
+                        <div class="label">Google</div>
+                    </div>
+                </a>
+                <a asp-action="ExternalLogin" asp-route-provider="Facebook">
+                    <div class="item">
+                        <div class="icon">fingerprint</div>
+                        <div class="label">Facebook</div>
+                    </div>
+                </a>
+                <a asp-action="ExternalLogin" asp-route-provider="Microsoft">
+                    <div class="item">
+                        <div class="icon">fingerprint</div>
+                        <div class="label">Microsoft</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

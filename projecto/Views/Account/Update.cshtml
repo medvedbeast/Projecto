@@ -1,0 +1,58 @@
+﻿@model UpdateAccountViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.Email} // Update account";
+    ViewBag.Stylesheet = "update-account.css";
+}
+<div class="block">
+    <div class="title">
+        Edit your account information:
+    </div>
+    <form class="content shadow border" asp-action="Update" asp-controller="Account" method="post">
+        <div class="row">
+            <div id="first-name" class="item left">
+                <label asp-for="FirstName">First Name</label>
+                <input asp-for="FirstName" />
+                <div class="error">
+                    <span asp-validation-for="FirstName"></span>
+                </div>
+            </div>
+            <div id="last-name" class="item">
+                <label asp-for="LastName">Last Name</label>
+                <input asp-for="LastName" />
+                <div class="error">
+                    <span asp-validation-for="LastName"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="email" class="item left">
+                <label asp-for="Email">Email address</label>
+                <input asp-for="Email" />
+                <div class="error">
+                    <span asp-validation-for="Email"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="item left">
+                <label asp-for="NewPassword">New Password</label>
+                <input asp-for="NewPassword" />
+                <div class="error">
+                    <span asp-validation-for="NewPassword"></span>
+                </div>
+            </div>
+            <div class="item">
+                <label asp-for="NewPasswordConfirmation">Confirm New Password</label>
+                <input asp-for="NewPasswordConfirmation" />
+                <div class="error">
+                    <span asp-validation-for="NewPasswordConfirmation"></span>
+                </div>
+            </div>
+        </div>
+        <div class="controls">
+            <button class="button" type="submit">SAVE CHANGES</button>
+            <a class="button" asp-action="Index">CANCEL</a>
+        </div>
+    </form>
+</div>

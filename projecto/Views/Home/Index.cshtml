@@ -1,0 +1,89 @@
+﻿@model HomeViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = "Projecto // Home";
+    ViewBag.Stylesheet = "home.css";
+}
+
+<div id="projects" class="block">
+    <div class="title">
+        <div class="text">Your projects:</div>
+        <div class="spacer"></div>
+    </div>
+    <div class="content">
+        <a asp-action="Create" asp-controller="Project">
+            <div class="card empty">
+                <div class="link">
+                    <div class="icon">add</div>
+                    <div class="label">Create new project</div>
+                </div>
+            </div>
+        </a>
+        @{
+            int index = 2;
+            if (Model.Projects.Count() > 0)
+            {
+                foreach (var project in Model.Projects)
+                {
+                    <a asp-action="Index" asp-controller="Project" asp-route-projectUrl="@project.Url">
+                        <div class="card @(index % 4 == 0 ? "last" : "") border shadow">
+                            <div class="name">@project.Name</div>
+                            <div class="progress" width="240" height="240" radius="100" stroke-width="20" percentage="@project.Done">
+                                <div class="text">
+                                    <div class="label">PROGRESS:</div>
+                                    <div class="value">@project.Done%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    index++;
+                }
+            }
+        }
+    </div>
+</div>
+<div id="issues" class="block">
+    <div class="title">
+        <div class="text">Recent issues:</div>
+        <div class="spacer"></div>
+    </div>
+    <div class="content">
+        @if (Model.Issues.Count() > 0)
+        {
+            <table class="shadow border">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>SUBJECT</td>
+                        <td>TYPE</td>
+                        <td>STATUS</td>
+                        <td>PRIORITY</td>
+                        <td>DUE ON</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var issue in Model.Issues)
+                    {
+                    <tr class="@(issue.DueDate < DateTime.Today ? "outdated" : "")"
+                        onclick="location='@Url.Action("Index", "Issue", new { projectUrl = issue.ProjectUrl, versionUrl = issue.VersionUrl, issueId = issue.Id })'">
+                        <td class="id">@($"#{issue.Id}")</td>
+                        <td class="subject">@issue.Subject</td>
+                        <td class="type">@issue.Type</td>
+                        <td class="status">@issue.Status</td>
+                        <td class="priority">@issue.Priority</td>
+                        <td class="date">@issue.DueDate.ToString("dd.MM.yy")</td>
+                    </tr>
+                    }
+
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="placeholder">
+                <div class="icon">info_outline</div>
+                <div class="label">No recent issues found!</div>
+            </div>
+        }
+    </div>
+</div>

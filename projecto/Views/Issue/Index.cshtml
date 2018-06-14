@@ -1,0 +1,219 @@
+﻿@model IssueViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"Issue #{Model.Id}: `{Model.Subject}`";
+    ViewBag.Stylesheet = "issue.css";
+    ViewBag.Script = "issue.js";
+}
+<div id="details" class="block">
+    <div class="title">
+        ISSUE DETAILS:
+    </div>
+    <div class="content border shadow">
+        @if ((Model.UserRole != null && Model.UserRole != "Watcher") || (Model.UserProjectRole == "Creator" || Model.UserProjectRole == "Manager"))
+        {
+            <div class="controls">
+                <a asp-action="Assignments">
+                    <div class="button" color="teal">
+                        <div class="icon">people_outline</div>
+                        <div class="label">EDIT ASSIGNMENTS</div>
+                    </div>
+                </a>
+                <a asp-action="Update">
+                    <div class="button" color="green">
+                        <div class="icon">mode_edit</div>
+                        <div class="label">EDIT ISSUE</div>
+                    </div>
+                </a>
+                <div class="spacer"></div>
+                @if (Model.UserRole == "Creator" || Model.UserRole == "Manager" || Model.UserProjectRole == "Creator" || Model.UserProjectRole == "Manager")
+                {
+                    <div class="button last" color="red" onclick="ShowDialog('#delete-dialog')">
+                        <div class="icon">delete</div>
+                        <div class="label">DELETE ISSUE</div>
+                    </div>
+                }
+            </div>
+        }
+        <div class="row">
+            <a asp-action="Index" asp-controller="Project">
+                <div id="project-name" class="item">
+                    <div class="label">Project name</div>
+                    <div class="value">@Model.ProjectName</div>
+                </div>
+            </a>
+            <a asp-action="Index" asp-controller="Version">
+                <div id="version-name" class="item">
+                    <div class="label">Project version</div>
+                    <div class="value">@Model.VersionName</div>
+                </div>
+            </a>
+            @if (Model.ParentIssueId != null)
+            {
+                <a asp-action="Index" asp-route-issueId="@Model.ParentIssueId">
+                    <div id="parent-issue" class="item">
+                        <div class="label">Parent issue:</div>
+                        <div class="value">@Model.ParentIssueSubject</div>
+                    </div>
+                </a>
+            }
+        </div>
+        <div class="row">
+            <div id="subject" class="item">
+                <div class="label">Issue subject</div>
+                <div class="value" multiline>@Model.Subject</div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="type" class="item">
+                <div class="label">Issue type</div>
+                <div class="value">@Model.Type.ToLower()</div>
+            </div>
+            <div id="status" class="item">
+                <div class="label">Issue status</div>
+                <div class="value">@Model.Status.ToLower()</div>
+            </div>
+            <div id="priority" class="item">
+                <div class="label">Issue priority</div>
+                <div class="value">@Model.Priority.ToLower()</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="item">
+                <div class="label">Issue description</div>
+                <div class="value" multiline>@Html.Raw(Model.Description)</div>
+            </div>
+        </div>
+        <div class="information">
+            <div class="item">
+                <div class="label">Start date</div>
+                <div class="value">@Model.StartDate.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Due date</div>
+                <div class="value">@Model.DueDate.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Estimated time</div>
+                <div class="value">@Model.EstimatedTime</div>
+            </div>
+            <div class="item">
+                <div class="label">Done</div>
+                <div class="value">@Model.Done</div>
+            </div>
+        </div>
+        <div class="assignments">
+            @foreach (var assignee in Model.Assignees)
+            {
+                <div class="item @assignee.Role.ToLower()">
+                    <div class="role">@($"{assignee.Role}:")</div>
+                    <a asp-action="Index" asp-controller="Account" asp-route-id="@assignee.Id" target="_blank">
+                        <div class="name">@assignee.Name</div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@if (Model.Attachments.Count() > 0 || (Model.UserRole != null && Model.UserRole != "Watcher") || (Model.UserProjectRole == "Creator" || Model.UserProjectRole == "Manager"))
+{
+    <div id="attachments" class="block">
+        <canvas id="attachment-canvas" style="display: none;"></canvas>
+        <form id="attachment-input-form">
+            <input id="attachments-input" type="file" style="display: none;" onchange="OnAttachmentInputChanged()" create-action="@Url.Action("CreateAttachment", "Issue")" delete-action="@Url.Action("Index", "Issue")" />
+        </form>
+        <div class="title">
+            ISSUE ATTACHMENTS:
+        </div>
+        <div class="content">
+            @if ((Model.UserRole != null && Model.UserRole != "Watcher") || (Model.UserProjectRole == "Creator" || Model.UserProjectRole == "Manager"))
+            {
+                <div class="item empty" onclick="OnCreateAttachmentClicked()">
+                    <div class="icon">add</div>
+                    <div class="text">Add new attachment</div>
+                </div>
+            }
+            @if (Model.Attachments.Count() > 0)
+            {
+                foreach (var attachment in Model.Attachments)
+                {
+                    <div id="@attachment.Id" class="item border shadow" style="background-image: url(@attachment.Content)" onclick="OnViewAttachmentClicked(@attachment.Id)">
+                        <div class="data" style="display: none;" comment="@attachment.Comment"></div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+}
+<!--------------------------------------------dialogs---------------------------------------------->
+<div id="delete-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="Delete" asp-route-issueId="@Model.Id">
+        <div class="title alert">You really want to delete this version?</div>
+        <div class="content">
+            If you delete an issue, all related issues will be deleted.<br />
+            Do you confirm your action?
+        </div>
+        <div class="controls">
+            <button type="submit" class="margined alert">DELETE</button>
+            <button type="button" onclick="HideDialog('#delete-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="attachment-create-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title">Create new attachment</div>
+        <div class="content">
+            <img />
+        </div>
+        <div class="input">
+            <label for="Comment">Comment</label>
+            <textarea name="Comment"></textarea>
+        </div>
+        <div class="controls">
+            <button type="button" class="margined" onclick="OnConfirmCreateAttachmentClicked()">CREATE</button>
+            <button type="button" onclick="HideDialog('#attachment-create-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="attachment-view-dialog" class="dialog hidden">
+    <form class="border shadow" delete-action="@Url.Action("DeleteAttachment")">
+        <div class="title">Attachment details</div>
+        <div class="content">
+            <img />
+        </div>
+        <div class="input">
+            <label for="Comment">Comment</label>
+            <div></div>
+        </div>
+        <div class="controls">
+            <button type="button" class="margined" onclick="OnEnlargeAttachmentClicked()">ENLARGE</button>
+            @if (Model.UserRole != null && Model.UserRole != "Watcher")
+            {
+                <button type="button" class="margined" onclick="OnDeleteAttachmentClicked()">REMOVE</button>
+            }
+            <button type="button" onclick="HideDialog('#attachment-view-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>
+<div id="success-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title">Success</div>
+        <div class="content">
+            You request was successfully processed.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#success-dialog')">OK</button>
+        </div>
+    </form>
+</div>
+<div id="error-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title alert">Error</div>
+        <div class="content">
+            An error occured while processing your request. Please, try again later.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#error-dialog')">OK</button>
+        </div>
+    </form>
+</div>

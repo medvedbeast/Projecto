@@ -1,0 +1,163 @@
+﻿@model ProjectViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = Model.Name;
+    ViewBag.Stylesheet = "project.css";
+}
+<div id="details" class="block">
+    <div class="title">
+        Project details:
+    </div>
+    <div class="content shadow border">
+        <div class="controls">
+            @if (Model.UserRole == "Creator" || Model.UserRole == "Manager")
+            {
+
+                <a asp-action="Create" asp-controller="Version" asp-route-projectUrl="@Model.Url">
+                    <div class="button" color="teal">
+                        <div class="icon">add</div>
+                        <div class="label">CREATE VERSION</div>
+                    </div>
+                </a>
+                <a asp-action="Update">
+                    <div class="button" color="green">
+                        <div class="icon">mode_edit</div>
+                        <div class="label">EDIT PROJECT</div>
+                    </div>
+                </a>
+                <a asp-action="Assignments">
+                    <div class="button" color="purple">
+                        <div class="icon">people_outline</div>
+                        <div class="label">ASSIGNMENTS</div>
+                    </div>
+                </a>
+            }
+            <a asp-action="Gantt">
+                <div class="button" color="brown">
+                    <div class="icon">assessment</div>
+                    <div class="label">GANNT</div>
+                </div>
+            </a>
+            <a asp-action="Activities">
+                <div class="button" color="orange">
+                    <div class="icon">feedback</div>
+                    <div class="label">ACTIVITY LOG</div>
+                </div>
+            </a>
+            <a asp-action="Wiki">
+                <div class="button" color="blue">
+                    <div class="icon">assessment</div>
+                    <div class="label">WIKI</div>
+                </div>
+            </a>
+            @if (Model.UserRole != "Creator" && Model.UserRole != "Manager")
+            {
+                <div class="spacer"></div>
+            }
+            else
+            {
+                <div class="button last" color="red" onclick="ShowDialog('#delete-dialog')">
+                    <div class="icon">delete</div>
+                    <div class="label">DELETE PROJECT</div>
+                </div>
+            }
+        </div>
+        <div id="project-name" class="row">
+            <div class="label">Project name</div>
+            <div class="value">@Model.Name</div>
+        </div>
+        @if (Model.ParentProjectName != null)
+        {
+            <div id="parent-project" class="row">
+                <div class="label">Parent project:</div>
+                <div class="value">
+                    <a asp-action="Index" asp-route-projectUrl="@Model.ParentProjectUrl">@Model.ParentProjectName</a>
+                </div>
+            </div>
+        }
+        <div class="row">
+            <div class="label">Project overview</div>
+            <div class="value">@Html.Raw(Model.Overview)</div>
+        </div>
+        <div class="information">
+            <div class="item">
+                <div class="label">Start date</div>
+                <div class="value">@Model.StartDate.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Due date</div>
+                <div class="value">@Model.DueDate.ToString("dd.MM.yy")</div>
+            </div>
+            <div class="item">
+                <div class="label">Open Issues</div>
+                <div class="value">@Model.OpenIssues</div>
+            </div>
+            <div class="item">
+                <div class="label">Closed Issues</div>
+                <div class="value">@Model.ClosedIssues</div>
+            </div>
+            <div class="item">
+                <div class="label">Outdated Issues</div>
+                <div class="value">@Model.OutdatedIssues</div>
+            </div>
+        </div>
+        <div class="assignments">
+            @foreach (var assignee in Model.Assignees)
+            {
+                <div class="item @assignee.Role.ToLower()">
+                    <div class="role">@($"{assignee.Role}:")</div>
+                    <a asp-action="Index" asp-controller="Account" asp-route-id="@assignee.Id" target="_blank">
+                        <div class="name">@assignee.Name</div>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<div id="versions" class="block">
+    <div class="title">
+        Project Versions:
+    </div>
+    <div class="content">
+        @if (Model.Versions.Count() > 0)
+        {
+            <table class="shadow border">
+                <thead>
+                    <tr>
+                        <td>Name</td>
+                        <td>Issues</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var version in Model.Versions)
+                    {
+                        <tr onclick="location.href='@version.Url'">
+                            <td class="name">@version.Name</td>
+                            <td>@version.OpenIssues</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="placeholder">
+                <div class="icon">info_outline</div>
+                <div class="label">No recent issues found!</div>
+            </div>
+        }
+    </div>
+</div>
+<div id="delete-dialog" class="dialog hidden">
+    <form class="border shadow" asp-action="Delete">
+        <div class="title alert">You really want to delete this project?</div>
+        <div class="content">
+            If you delete a project, all related projects and issues will be deleted.<br />
+            Do you confirm your action?
+        </div>
+        <div class="controls">
+            <button type="submit" class="margined alert" onclick="OnConfirmDeleteClicked('#delete-dialog')">DELETE</button>
+            <button type="button" onclick="HideDialog('#delete-dialog')">CANCEL</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,68 @@
+﻿@model ProjectWikiViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.ProjectName} // Wiki";
+    ViewBag.Stylesheet = "project-wiki.css";
+    ViewBag.Script = "project-wiki.js";
+    ViewBag.Vue = true;
+}
+@section scripts {
+    <script src="~/lib/trumbowyg/dist/trumbowyg.min.js" type="text/javascript"></script>
+    <link href="~/lib/trumbowyg/dist/ui/trumbowyg.min.css" rel="stylesheet" type="text/css" />
+}
+@section vue {
+    <script type="text/javascript">
+    var wiki = new Vue({
+        el: "#wiki",
+        data: {
+            content: "@(Html.Raw(Model.Content))"
+        }
+    });
+    </script>
+}
+<div id="wiki" class="block">
+    <div class="title">
+        PROJECT WIKI:
+    </div>
+    <div class="content border shadow">
+        @if (Model.UserRole != null && Model.UserRole != "Watcher")
+        {
+            <div class="tabs">
+                <div class="item selected" onclick="OnTabClicked(1)" tabindex="1">View wiki</div>
+                <div class="item" onclick="OnTabClicked(2)" tabindex="2">Edit wiki</div>
+            </div>
+        }
+        <div class="pages">
+            <div id="page-1" class="item selected" tabindex="1">
+                <div class="text" v-html="content"></div>
+            </div>
+            <div id="page-2" class="item" tabindex="2">
+                <div class="data" style="display: none;" action="@Url.Action("UpdateWiki")"></div>
+                <textarea>{{ content }}</textarea>
+                <div class="button" onclick="OnUpdateClicked()">UPDATE</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="success-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title">Success</div>
+        <div class="content">
+            Project wiki was successfully updated.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#success-dialog')">OK</button>
+        </div>
+    </form>
+</div>
+<div id="error-dialog" class="dialog hidden">
+    <form class="border shadow">
+        <div class="title alert">Error</div>
+        <div class="content">
+            An error occured while processing your request. Please, try again later.
+        </div>
+        <div class="controls">
+            <button type="button" onclick="HideDialog('#error-dialog')">OK</button>
+        </div>
+    </form>
+</div>

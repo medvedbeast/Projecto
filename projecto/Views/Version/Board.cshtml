@@ -1,0 +1,37 @@
+﻿@model VersionBoardViewModel
+@{
+    Layout = "_Default";
+    ViewBag.Title = $"{Model.Name} // Board";
+    ViewBag.Stylesheet = "version-board.css";
+    ViewBag.Script = "version-board.js";
+}
+
+<div class="block">
+    <div class="title">
+        PROJECT VERSION AGILE BOARD:
+    </div>
+    <div id="content" class="content" url="@Url.Action("UpdateBoard")">
+        @foreach (var status in Model.Statuses)
+        {
+            <div class="container border shadow" status-id="@status.Id" ondrop="OnCardDropped(event, this)" ondragover="AllowDrop(event)" ondragenter="OnCardDragEnter(event, this)" ondragleave="OnCardDragLeave(event)">
+                <div class="name">@status.Name</div>
+                @if (status.Issues.Count() > 0)
+                {
+                    foreach (var issue in status.Issues)
+                    {
+                        <div issue-id="@issue.Id" class="item" draggable="@((Model.UserRole == null || Model.UserRole == "Watcher") ? "false" : "true")"
+                             ondragstart="OnCardDragStarted(event, this)"
+                             ondragend="OnCardDragEnded(this)">
+                            <div class="id">#@issue.Id</div>
+                            <div class="subject">
+                                <a draggable="false" asp-action="Index" asp-controller="Issue" asp-route-issueId="@issue.Id" target="_blank">
+                                    @issue.Subject
+                                </a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        }
+    </div>
+</div>
