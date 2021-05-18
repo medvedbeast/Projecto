@@ -4,8 +4,8 @@ An application to help develope and manage application using AGILE methodology. 
 
 ![Image 1](./readme/1.png)
 
-!(https://github.com/medvedbeast/Projecto/tree/master/readme/2.png?raw=true)
+![Image 2](./readme/2.png)
 
-!(https://github.com/medvedbeast/Projecto/tree/master/readme/3.png?raw=true)
+![Image 3](./readme/3.png)
 
-!(https://github.com/medvedbeast/Projecto/tree/master/readme/4.png?raw=true)
+![Image 4](./readme/4.png)
